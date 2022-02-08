@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPOSITORY="docker.io/jawnsy"
+REPO="docker.io/jawnsy"
 IMAGE_NAME="builder"
 IMAGE_TAG="latest"
 
@@ -8,7 +8,7 @@ if [ "${EVENT_TYPE}" == "pull_request" ]; then
   IMAGE_TAG="pr-${EVENT_NUMBER}"
 fi
 
-IMAGE_REF="${REPOSITORY}/${IMAGE_NAME}:${IMAGE_TAG}"
+IMAGE_REF="${REPO}/${IMAGE_NAME}:${IMAGE_TAG}"
 
 docker build . --tag="$IMAGE_REF"
 
