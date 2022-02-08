@@ -34,8 +34,8 @@ jobs:
   environment:
     runs-on: ubuntu-20.04
     outputs:
-      imageref: ${{ steps.build.imageref }}
-      test: ${{ steps.build.test }}
+      imageref: ${{ steps.build.outputs.imageref }}
+      test: ${{ steps.build.outputs.test }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
