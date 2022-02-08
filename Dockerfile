@@ -1,5 +1,11 @@
 FROM docker.io/library/ubuntu
 
+RUN apt-get update --quiet && \
+    apt-get install --yes --quiet \
+      curl \
+      gzip \
+      tar
+
 # Install tools with published releases, where that is the
 # preferred/recommended installation method.
 ARG DIVE_VERSION=0.10.0 \
