@@ -1,0 +1,66 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  actions: write # for cancel-workflow-action
+  checks: none
+  contents: read
+  deployments: none
+  id-token: write # for workload identity federation
+  issues: none
+  packages: none
+  pull-requests: none
+  repository-projects: none
+  security-events: none
+  statuses: none
+
+# Cancel in-progress runs for pull requests when developers push
+# additional changes
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  environment:
+    runs-on: ubuntu-20.04
+    outputs:
+      image-ref: ${{ steps.build.image-ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure Docker for Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create image ref
+        run: ./build.sh
+        id: build
+        env:
+          EVENT_TYPE: "${{ github.event_name }}"
+          PULL_REQUEST: "${{ github.event.number }} "
+
+  build:
+    runs-on: ubuntu-20.04
+    needs:
+      - environment
+    container:
+      image: "${{ needs.environment.outputs.image-ref }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Trivy
+        run: trivy filesystem .
