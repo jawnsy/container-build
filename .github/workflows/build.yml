@@ -49,15 +49,15 @@ jobs:
         run: ./build.sh
         id: build
         env:
-          EVENT_TYPE: "${{ github.event_name }}"
-          PULL_REQUEST: "${{ github.event.number }} "
+          EVENT_TYPE: ${{ github.event_name }}
+          PULL_REQUEST: ${{ github.event.number }}
 
   build:
     runs-on: ubuntu-20.04
     needs:
       - environment
     container:
-      image: "${{ needs.environment.outputs.image-ref }}"
+      image: ${{ needs.environment.outputs.image-ref }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
