@@ -15,5 +15,7 @@ docker build . --tag="$IMAGE_REF"
 docker push --quiet "$IMAGE_REF"
 
 echo
+echo "IMAGE REF: ${IMAGE_REF}"
+echo
 echo "::set-output name=image-ref::${IMAGE_REF}"
 echo
