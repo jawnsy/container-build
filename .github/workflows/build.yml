@@ -57,10 +57,10 @@ jobs:
     runs-on: ubuntu-20.04
     needs:
       - environment
-    # container:
-    #   image: ${{ needs.environment.outputs.image-ref }}
-    #   volumes:
-    #     - /var/run/docker.sock:/var/run/docker.sock
+    container:
+      image: docker.io/jawnsy/builder:${{ needs.environment.outputs.imageref }}
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
     steps:
       - name: Checkout
         uses: actions/checkout@v2
